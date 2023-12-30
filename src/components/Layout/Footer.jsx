@@ -25,10 +25,18 @@ import { useSelector } from "react-redux";
 import Cart from "../cart/Cart";
 
 const subscribeSchema = yup.object({
-  email: yup
+  input: yup
     .string()
-    .required("Email is required")
-    .email("Email should be valid"),
+    .required("Email or phone number is required")
+    .test(
+      "valid-input",
+      "Input should be a valid email or a 10-digit phone number",
+      (value) => {
+        const isEmail = yup.string().email().isValidSync(value);
+        const isPhoneNumber = /^\d{10}$/.test(value);
+        return isEmail || isPhoneNumber;
+      }
+    ),
 });
 
 const Footer = () => {
@@ -40,14 +48,14 @@ const Footer = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      input: "",
     },
     validationSchema: subscribeSchema,
     onSubmit: async (values, { resetForm }) => {
       setLoading(true);
       await axios
         .post(`${server}/subscribe/subscribe`, {
-          email: values.email,
+          input: values.input,
         })
         .then((res) => {
           toast.success(res.data.message);
@@ -87,15 +95,15 @@ const Footer = () => {
               <div className="block">
                 <input
                   type="text"
-                  placeholder="Enter your email..."
-                  onChange={formik.handleChange("email")}
-                  onBlur={formik.handleBlur("email")}
-                  value={formik.values.email}
+                  placeholder="Phone or email..."
+                  onChange={formik.handleChange("input")}
+                  onBlur={formik.handleBlur("input")}
+                  value={formik.values.input}
                   className="text-gray-800
                 sm:w-72 w-full sm:mr-5 mr-1 lg:mb-0 mb-4 py-2.5 rounded px-2 focus:outline-none"
                 />
                 <p className="text-red-500 text-xs mt-0 lg:mt-1">
-                  {formik.touched.email && formik.errors.email}
+                  {formik.touched.input && formik.errors.input}
                 </p>
               </div>
               <button
