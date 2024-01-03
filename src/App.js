@@ -88,6 +88,7 @@ import GuestCheckoutPage from "./pages/GuestCheckout";
 import GuestPaymentPage from "./pages/GuestPaymentPage";
 import AdminOrders from "./components/Admin/AdminOrders";
 import SearchOrder from "./components/SearchOrder.jsx";
+import Whatsapp from "./components/Whatsaap/Whatsapp.js";
 
 const App = () => {
   const [stripeApikey, setStripeApiKey] = useState("");
@@ -387,6 +388,14 @@ const App = () => {
           element={
             <ProtectedAdminRoute>
               <AdminDashboardPage />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/announcements"
+          element={
+            <ProtectedAdminRoute>
+              <Whatsapp />
             </ProtectedAdminRoute>
           }
         />

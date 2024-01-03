@@ -1,0 +1,76 @@
+.App {
+  text-align: center;
+}
+
+.hero {
+  height: 100%;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+  position: absolute;
+}
+
+.form-box {
+  width: 480px;
+  height: 580px;
+  position: relative;
+  margin: 2% auto;
+  background: #fff;
+  padding: 5px;
+}
+.button-box {
+  width: 360px;
+  height: 50px;
+  margin: 35px auto;
+  position: relative;
+  box-shadow: 0 0 20px 9px #ff61241f;
+  border-radius: 30px;
+  overflow: hidden; /* Added to hide overflowing content */
+}
+
+.slide-right {
+  transform: translateX(-100%);
+}
+
+.slide-left {
+  transform: translateX(-0);
+}
+
+.toggle-btn {
+  padding: 15px 15px; /* Adjusted padding */
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  outline: none;
+  position: absolute;
+  color: #000;
+  font-size: 16px;
+  transition: 0.5s;
+}
+
+.toggle-btn:first-child {
+  left: 10;
+}
+
+.toggle-btn:last-child {
+  left: 100%;
+}
+
+#btn {
+  top: 0;
+  left: 0;
+  position: absolute;
+  height: 50px;
+  width: 50%;
+  background: linear-gradient(to right, #ff105f, #ffad06);
+  border-radius: 30px;
+  transition: 0.5s;
+}
+.qrcode {
+  margin: 20px 43%;
+}
+@media (max-width: 767px) {
+  .qrcode {
+    margin: 20px 22%;
+  }
+}
