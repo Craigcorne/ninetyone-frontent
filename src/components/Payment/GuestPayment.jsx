@@ -252,7 +252,7 @@ const PaymentInfo = ({
             localStorage.setItem("latestOrder", JSON.stringify([]));
             setTimeout(() => {
               window.location.reload();
-            }, 5000);
+            }, 2000);
           });
         try {
           axios.post(`${server}/order/sendmyorder`, order, config);
