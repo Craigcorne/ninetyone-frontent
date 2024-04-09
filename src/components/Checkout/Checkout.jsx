@@ -8,6 +8,7 @@ import { server } from "../../server";
 import { toast } from "react-toastify";
 import { NumericFormat } from "react-number-format";
 import { updatUserAddress } from "../../redux/actions/user";
+import { v4 as uuidv4 } from "uuid";
 
 const Checkout = () => {
   const { user } = useSelector((state) => state.user);
@@ -17,12 +18,16 @@ const Checkout = () => {
   const [userInfo, setUserInfo] = useState(false);
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
+  const [referee, setReferee] = useState("");
+  const [refCode, setRefCode] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [couponCode, setCouponCode] = useState("");
   const [couponCodeData, setCouponCodeData] = useState(null);
   const [discountPrice, setDiscountPrice] = useState(null);
   const [deliveryOption, setDeliveryOption] = useState("");
   const [shippingPrice, setShippingPrice] = useState(100);
+  const [discShop, setDiscShop] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -271,9 +276,8 @@ const Checkout = () => {
           day: "2-digit",
         })
         .replace(/\//g, "");
-      const randomPart = Array.from({ length: 5 }, () =>
-        Math.floor(Math.random() * 10)
-      ).join("");
+      const randomPart = uuidv4().slice(0, 5);
+
       const orderNumber = `#N1SCM${currentDate}${randomPart}`;
 
       const orderData = {
@@ -285,6 +289,8 @@ const Checkout = () => {
         discountPrice,
         shippingAddress,
         user,
+        discShop,
+        referee,
       };
 
       // update local storage with the updated orders array
@@ -308,6 +314,7 @@ const Checkout = () => {
       if (res.data.couponCode !== null) {
         const isCouponValid =
           cart && cart.filter((item) => item.shopId === shopId);
+        setDiscShop(shopId);
 
         if (isCouponValid.length === 0) {
           toast.error("Coupon code is not valid for this shop");
@@ -330,6 +337,42 @@ const Checkout = () => {
         setCouponCode("");
       }
     });
+  };
+
+  const handleSubmitt = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.get(`${server}/user/get-user-id/${refCode}`);
+
+      if (response.data.success) {
+        const userId = response.data.userId;
+
+        if (userId === user._id) {
+          setReferee("");
+          console.log("Referee is", referee);
+          toast.error("You cannot use your own RefCode");
+        }
+        if (userId === !user._id) {
+          console.log("User ID:", userId);
+          setReferee(userId);
+          toast.success("Referral added");
+          setLoading(true);
+        }
+      } else {
+        console.log("User not found.");
+        toast.error("Referral code does not exist");
+        setRefCode("");
+      }
+    } catch (error) {
+      setRefCode("");
+      if (error.response && error.response.status === 404) {
+        toast.error("Referral code does not exist");
+      } else {
+        toast.error("An error occurred while fetching user ID");
+      }
+      setLoading(false);
+    }
   };
 
   const discountPercentenge = couponCodeData ? discountPrice : "";
@@ -363,12 +406,19 @@ const Checkout = () => {
         <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
           <CartData
             handleSubmit={handleSubmit}
+            handleSubmitt={handleSubmitt}
             totalPrice={totalPrice}
             subTotalPrice={subTotalPrice}
             couponCode={couponCode}
             setCouponCode={setCouponCode}
             discountPercentenge={discountPercentenge}
             shipping={shippingPricee}
+            refCode={refCode}
+            setRefCode={setRefCode}
+            referee={referee}
+            setReferee={setReferee}
+            loading={loading}
+            setLoading={setLoading}
           />
         </div>
       </div>
@@ -657,12 +707,19 @@ const ShippingInfo = ({
 
 const CartData = ({
   handleSubmit,
+  handleSubmitt,
   totalPrice,
   shipping,
   subTotalPrice,
   couponCode,
   setCouponCode,
   discountPercentenge,
+  refCode,
+  setRefCode,
+  referee,
+  setReferee,
+  loading,
+  setLoading,
 }) => {
   return (
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
@@ -736,6 +793,25 @@ const CartData = ({
           value="Apply code"
           type="submit"
         />
+      </form>
+      <br />
+      <form onSubmit={handleSubmitt}>
+        <input
+          type="text"
+          className={`${styles.input} h-[40px] pl-2`}
+          placeholder="Referral Code"
+          value={refCode}
+          onChange={(e) => setRefCode(e.target.value)}
+          required
+        />
+        {!loading && (
+          <input
+            className={`w-full h-[40px] border border-[#f63b60] text-center text-[#f63b60] rounded-[3px] mt-8 cursor-pointer`}
+            required
+            value="Apply code"
+            type="submit"
+          />
+        )}
       </form>
     </div>
   );

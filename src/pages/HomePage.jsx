@@ -18,7 +18,7 @@ const HomePage = () => {
       <Meta title="Home" />
       <Header activeHeading={1} activeItem={"home"} />
       <Hero />
-      <Categories />
+      {/* <Categories /> */}
       <FlashSale />
       <BestDeals />
       <RecentProduct />

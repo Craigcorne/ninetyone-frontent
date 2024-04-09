@@ -18,7 +18,6 @@ const AdminOrders = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    // Fetch order details when the component mounts
     async function fetchOrderDetails() {
       try {
         const response = await axios.get(
@@ -45,8 +44,6 @@ const AdminOrders = () => {
         `${server}/order/update-order-status/${id}`,
         {
           status,
-          totalPricee,
-          sellerId,
         },
         { withCredentials: true }
       )
@@ -78,19 +75,6 @@ const AdminOrders = () => {
       });
   };
 
-  const calculateTotalPrice = () => {
-    if (data) {
-      return data.cart.reduce((total, item) => {
-        const itemPrice = item.qty * item.discountPrice;
-        return total + itemPrice;
-      }, 0);
-    }
-    return 0;
-  };
-
-  const totalPricee = calculateTotalPrice();
-  console.log("this is", data);
-
   return (
     <div className={`py-4 min-h-screen ${styles.section}`}>
       <div className="w-full flex items-center justify-between">
@@ -109,7 +93,7 @@ const AdminOrders = () => {
 
       <div className="w-full flex items-center justify-between pt-6">
         <h5 className="text-[#00000084]">
-          Order ID: <span>#{data?._id?.slice(0, 8)}</span>
+          Order ID: <span>{data?.orderNo}</span>
         </h5>
         <h5 className="text-[#00000084]">
           Placed on: <span>{data?.createdAt?.slice(0, 10)}</span>
@@ -127,18 +111,28 @@ const AdminOrders = () => {
               alt=""
               className="w-[80x] h-[80px]"
             />
-            <div className="w-full">
-              <h5 className="pl-3 text-[20px]">{item.name}</h5>
-              <h5 className="pl-3 text-[20px] text-[#00000091]">
-                Ksh{item.discountPrice} x {item.qty}
-              </h5>
+            <div className="flex flex-col w-full">
+              <div className="flex justify-between w-full">
+                <div className="w-[50%]">
+                  <h5 className="pl-3 text-[20px]">{item.name}</h5>
+                  <h5 className="pl-3 text-[20px] text-[#00000091]">
+                    Ksh{item.discountPrice} x {item.qty}
+                  </h5>
+                </div>
+                <div className="w-[50%]">
+                  <h5 className="pl-3 text-[20px]"> {item.shop.email}</h5>
+                  <h5 className="pl-3 text-[20px] text-[#00000091] text-right">
+                    {item.shop.name}
+                  </h5>
+                </div>
+              </div>
             </div>
           </div>
         ))}
 
       <div className="border-t w-full text-right">
         <h5 className="pt-3 text-[18px]">
-          Total Price: <strong>Ksh{totalPricee}</strong>
+          Total Price: <strong>Ksh{data?.totalPrice}</strong>
         </h5>
       </div>
       <br />
@@ -163,10 +157,7 @@ const AdminOrders = () => {
         </div>
         <div className="w-full 800px:w-[40%]">
           <h4 className="pt-3 text-[20px]">Payment Info:</h4>
-          <h4>
-            Status:{" "}
-            {data?.paymentInfo?.status ? data?.paymentInfo?.status : "Not Paid"}
-          </h4>
+          <h4>Status: {data?.paymentInfo?.status}</h4>
         </div>
       </div>
       <br />

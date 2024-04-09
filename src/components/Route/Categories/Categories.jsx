@@ -4,13 +4,14 @@ import styles from "../../../styles/styles";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import axios from "axios";
 import { server } from "../../../server";
+import { useSelector } from "react-redux";
 
 const Categories = () => {
   const navigate = useNavigate();
   const [hideLeftArrow, setHideLeftArrow] = useState(true);
   const [hideRightArrow, setHideRightArrow] = useState(false);
   const sliderRef = useRef(null);
-
+  const { categories } = useSelector((state) => state.categories);
   const [categoriesData, setCategoriesData] = useState([]);
 
   useEffect(() => {
@@ -91,8 +92,8 @@ const Categories = () => {
             ref={sliderRef}
             style={{ scrollBehavior: "smooth" }}
           >
-            {categoriesData &&
-              categoriesData
+            {categories &&
+              categories
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((category, index) => (
                   <div

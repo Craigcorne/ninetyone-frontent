@@ -9,7 +9,7 @@ const ShopUpdateProduct = () => {
       <DashboardHeader />
       <div className="flex items-center justify-between w-full">
         <div className="w-[80px] 800px:w-[330px]">
-          <AdminSideBar active={6} />
+          <AdminSideBar active={3} />
         </div>
         <div className="w-full justify-center flex">
           <EditProduct />

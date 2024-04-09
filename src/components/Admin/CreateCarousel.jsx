@@ -30,15 +30,16 @@ const CreateCarouselPage = () => {
       console.log(error);
     }
   };
-
   const handleCreateCarousel = async () => {
     try {
       const formData = new FormData();
       formData.append("caption", caption);
-      formData.append("image", image);
-      await axios.post(`${server}/carousel/carousel`, {
-        caption,
-        image,
+      formData.append("image", image[0]); // Assuming image is a valid file object
+
+      await axios.post(`${server}/carousel`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       toast.success("Carousel created!");

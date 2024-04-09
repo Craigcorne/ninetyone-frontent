@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { AiOutlineCamera, AiOutlineDelete } from "react-icons/ai";
+import {
+  AiOutlineCamera,
+  AiOutlineDelete,
+  AiOutlineGift,
+  AiOutlineMoneyCollect,
+} from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { server } from "../../server";
 import styles from "../../styles/styles";
@@ -19,22 +24,29 @@ import { getAllOrdersOfUser } from "../../redux/actions/order";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { HiUserRemove } from "react-icons/hi";
+import { HiOutlineShoppingBag, HiUserRemove } from "react-icons/hi";
 import Spinner from "../Spinner";
 import CustomModal from "../CustomModal";
 import DynamicLoader from "../Layout/DynamicLoader";
 
 const ProfileContent = ({ active }) => {
   const { user, error, successMessage } = useSelector((state) => state.user);
+  const { orders, isLoading } = useSelector((state) => state.order);
   const [name, setName] = useState(user && user.name);
   const [email, setEmail] = useState(user && user.email);
   const [phoneNumber, setPhoneNumber] = useState(user && user.phoneNumber);
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState();
-
+  const [loading, setLoading] = useState(false);
+  const [refCode, setRefCode] = useState("");
+  const [showForm, setShowForm] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllOrdersOfUser(user._id));
+  }, []);
 
   useEffect(() => {
     if (error) {
@@ -85,6 +97,29 @@ const ProfileContent = ({ active }) => {
     }
   };
 
+  const handleSubmitt = async (e) => {
+    setLoading(true);
+    e.preventDefault();
+
+    try {
+      const apiUrl = `${server}/user/update-refcode/${user._id}`;
+
+      const response = await axios.put(apiUrl, { refCode });
+
+      console.log("Referral Code submitted:", refCode);
+      toast.success("Referral Code updated successfully!");
+      window.location.reload();
+    } catch (error) {
+      toast.error(error.message);
+      console.error(
+        "Error submitting Referral Code:",
+        error.message || "Failed to update Referral Code"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const removeImage = async (e) => {
     try {
       await axios.put(
@@ -108,7 +143,209 @@ const ProfileContent = ({ active }) => {
   return (
     <div className="w-full">
       {/* profile */}
+
       {active === 1 && (
+        <>
+          <div className="w-full p-4">
+            <h3 className="text-[22px] font-Poppins pb-2">Dashboard</h3>
+            <div className="w-full block 800px:flex items-center justify-between">
+              <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
+                <div className="flex items-center">
+                  <AiOutlineMoneyCollect
+                    size={30}
+                    className="mr-2"
+                    fill="#00000085"
+                  />
+                  <h3
+                    className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
+                  >
+                    Wallet
+                  </h3>
+                </div>
+                <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">
+                  Ksh. {user.availableBalance}
+                </h5>
+              </div>
+              <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
+                <div className="flex items-center">
+                  <HiOutlineShoppingBag
+                    size={30}
+                    className="mr-2"
+                    fill="#00000085"
+                  />
+                  <h3
+                    className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
+                  >
+                    Orders
+                  </h3>
+                </div>
+                <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">{}</h5>
+              </div>
+
+              <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
+                <div className="flex items-center">
+                  <AiOutlineGift size={30} className="mr-2" fill="#00000085" />
+                  <h3
+                    className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
+                  >
+                    Referral Code
+                  </h3>
+                </div>
+                <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">
+                  {!user.refCode || showForm ? (
+                    <form onSubmit={handleSubmitt} className="block lg:flex">
+                      <input
+                        type="text"
+                        placeholder="Enter your Code."
+                        onChange={(e) => setRefCode(e.target.value)}
+                        value={refCode}
+                        className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+                      />
+                      <button
+                        type="submit"
+                        className=" inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-[#56d879] rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
+                      >
+                        {loading ? (
+                          <p className="flex ml-[25%]">
+                            <Spinner /> sending...
+                          </p>
+                        ) : (
+                          <p className="">Send</p>
+                        )}
+                      </button>
+                    </form>
+                  ) : (
+                    <>
+                      <h2>{user.refCode}</h2>
+                      <button
+                        onClick={() => setShowForm(true)}
+                        className="text-sm text-blue-500 cursor-pointer focus:outline-none"
+                      >
+                        Change RefCode
+                      </button>
+                    </>
+                  )}
+                </h5>
+              </div>
+            </div>
+
+            <br />
+            <h3 className="text-[22px] font-Poppins pb-2">
+              Latest Transactions
+            </h3>
+            <div class="relative overflow-x-auto">
+              <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th scope="col" class="px-6 py-3">
+                      Mpesa Ref.
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                      Customer Number
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                      Amount
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                      Paid On
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* {transactions?.length === 0 && (
+                    <>
+                      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th
+                          scope="row"
+                          class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          <div class="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                        </th>
+                        <td class="px-6 py-4">
+                          {" "}
+                          <div class="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                        </td>
+                        <td class="px-6 py-4">
+                          {" "}
+                          <div class="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                        </td>
+                        <td class="px-6 py-4">
+                          {" "}
+                          <div class="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                        </td>
+                      </tr>
+                      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th
+                          scope="row"
+                          class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          <div class="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                        </th>
+                        <td class="px-6 py-4">
+                          {" "}
+                          <div class="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                        </td>
+                        <td class="px-6 py-4">
+                          {" "}
+                          <div class="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                        </td>
+                        <td class="px-6 py-4">
+                          {" "}
+                          <div class="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                        </td>
+                      </tr>
+                      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th
+                          scope="row"
+                          class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                        </th>
+                        <td class="px-6 py-4">
+                          {" "}
+                          <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                        </td>
+                        <td class="px-6 py-4">
+                          {" "}
+                          <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                        </td>
+                        <td class="px-6 py-4">
+                          {" "}
+                          <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                        </td>
+                      </tr>
+                    </>
+                  )}
+                  {transactions &&
+                    transactions.map((i) => (
+                      <tr
+                        key={i}
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                      >
+                        <th
+                          scope="row"
+                          class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          {i?.mpesa_ref}
+                        </th>
+                        <td class="px-6 py-4">{i?.customer_number}</td>
+                        <td class="px-6 py-4">Ksh. {i?.amount}</td>
+                        <td class="px-6 py-4">
+                          {" "}
+                          {moment(i?.createdAt).format(
+                            "MMMM Do YYYY, h:mm:ss a"
+                          )}
+                        </td>
+                      </tr>
+                    ))} */}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+
+      {active === 2 && (
         <>
           {modalOpen && (
             <CustomModal
@@ -222,35 +459,35 @@ const ProfileContent = ({ active }) => {
       )}
 
       {/* order */}
-      {active === 2 && (
+      {active === 3 && (
         <div>
           <AllOrders />
         </div>
       )}
 
       {/* Refund */}
-      {active === 3 && (
+      {active === 4 && (
         <div>
           <AllRefundOrders />
         </div>
       )}
 
       {/* Track order */}
-      {active === 5 && (
+      {active === 6 && (
         <div>
           <TrackOrder />
         </div>
       )}
 
       {/* Change Password */}
-      {active === 6 && (
+      {active === 7 && (
         <div>
           <ChangePassword />
         </div>
       )}
 
       {/*  user Address */}
-      {active === 7 && (
+      {active === 8 && (
         <div>
           <Address />
         </div>

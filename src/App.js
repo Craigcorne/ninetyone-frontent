@@ -89,21 +89,17 @@ import GuestPaymentPage from "./pages/GuestPaymentPage";
 import AdminOrders from "./components/Admin/AdminOrders";
 import SearchOrder from "./components/SearchOrder.jsx";
 import Whatsapp from "./components/Whatsaap/Whatsapp.js";
+import ShopAllAuctions from "./pages/Shop/ShopAllAuctions.jsx";
+import { getAllCategory } from "./redux/actions/categories.js";
 
 const App = () => {
-  const [stripeApikey, setStripeApiKey] = useState("");
-
-  async function getStripeApikey() {
-    const { data } = await axios.get(`${server}/payment/stripeapikey`);
-    setStripeApiKey(data.stripeApikey);
-  }
   useEffect(() => {
     Store.dispatch(getAllStatements());
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
     Store.dispatch(getAllProducts());
     Store.dispatch(getAllEvents());
-    getStripeApikey();
+    Store.dispatch(getAllCategory());
   }, []);
 
   return (
@@ -267,6 +263,8 @@ const App = () => {
           }
         />
         <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
+        {/* <Route path="shop/:name" element={<ShopLinkPage />} /> */}
+
         {/* shop Routes */}
         <Route path="/shop-create" element={<ShopCreatePage />} />
         <Route path="/shop-login" element={<ShopLoginPage />} />
@@ -354,7 +352,7 @@ const App = () => {
           path="/dashboard-events"
           element={
             <SellerProtectedRoute>
-              <ShopAllEvents />
+              <ShopAllFlashSale />
             </SellerProtectedRoute>
           }
         />
@@ -363,6 +361,14 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopAllCoupouns />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-auction"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllAuctions />
             </SellerProtectedRoute>
           }
         />

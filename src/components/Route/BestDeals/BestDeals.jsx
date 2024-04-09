@@ -13,7 +13,7 @@ const BestDeals = () => {
       (product) => product.stock > 0
     );
     const sortedData = inStockProducts.sort((a, b) => b.sold_out - a.sold_out);
-    const firstFive = sortedData.slice(0, 6);
+    const firstFive = sortedData.slice(0, 10);
     setData(firstFive);
   }, [allProducts]);
 
@@ -21,7 +21,7 @@ const BestDeals = () => {
     <div>
       <div className={`${styles.section}`}>
         <div className={`${styles.heading}`}>
-          <h1>Best Deals</h1>
+          <h1>Popular Products</h1>
         </div>
         <div className="overflow-x-auto flex space-x-4 mb-12 border-0">
           {data &&

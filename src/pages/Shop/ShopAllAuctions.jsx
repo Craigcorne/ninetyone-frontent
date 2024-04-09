@@ -1,23 +1,25 @@
 import React from "react";
 import DashboardHeader from "../../components/Shop/Layout/DashboardHeader";
-import WithdrawMoney from "../../components/Shop/WithdrawMoney";
 import DashboardSideBar from "../../components/Shop/Layout/DashboardSideBar";
 import Meta from "../../components/Meta";
+import AllAuction from "../../components/Shop/AllAuction";
 
-const ShopWithDrawMoneyPage = () => {
+const ShopAllAuctions = () => {
   return (
     <div>
-      <Meta title="Shop's Money Withdraws" />
+      <Meta title="Shop's all Coupons" />
 
       <DashboardHeader />
-      <div className="flex items-start justify-between w-full">
+      <div className="flex justify-between w-full">
         <div className="w-[80px] 800px:w-[330px]">
-          <DashboardSideBar active={8} />
+          <DashboardSideBar active={7} />
         </div>
-        <WithdrawMoney />
+        <div className="w-full justify-center flex">
+          <AllAuction />
+        </div>
       </div>
     </div>
   );
 };
 
-export default ShopWithDrawMoneyPage;
+export default ShopAllAuctions;

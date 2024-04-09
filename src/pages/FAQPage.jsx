@@ -76,8 +76,9 @@ const Faq = () => {
               <p className="text-base text-gray-500">
                 If you're not satisfied with your purchase, we accept returns
                 within 15 days of delivery. To initiate a return, please email
-                us at support@ecommercestore.com with your order number and a
-                brief explanation of why you're returning the item.
+                us at support@ninetyone.co.ke with your order number and a brief
+                explanation of why you're returning the item. Delivery charges
+                applies to the user.
               </p>
             </div>
           )}
@@ -124,9 +125,9 @@ const Faq = () => {
           {activeTab === 3 && (
             <div className="mt-4">
               <p className="text-base text-gray-500">
-                You can track your order by clicking the tracking link in your
-                shipping confirmation email, or by logging into your account on
-                our website and viewing the track order page.
+                You can track your order by clicking on this link
+                https://www.ninetyone.co.ke/searchorder, or by logging into your
+                account on our website and viewing the track order page.
               </p>
             </div>
           )}
@@ -174,9 +175,8 @@ const Faq = () => {
             <div className="mt-4">
               <p className="text-base text-gray-500">
                 You can contact our customer support team by emailing us at
-                support@ecommercestore.com, or by calling us at (+254)
-                712-012-113 between the hours of 9am and 5pm EST, Monday through
-                Saturday.
+                support@ninetyone.co.ke, or by calling us at (+254) 712-012-113
+                between the hours of 9am and 5pm EAT, Monday through Saturday.
               </p>
             </div>
           )}

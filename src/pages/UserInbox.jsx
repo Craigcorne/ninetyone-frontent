@@ -164,10 +164,9 @@ const UserInbox = () => {
     imageSendingHandler(file);
   };
 
-  const imageSendingHandler = async (e) => {
+  const imageSendingHandler = async (file) => {
     const formData = new FormData();
-
-    formData.append("images", e);
+    formData.append("images", file);
     formData.append("sender", user._id);
     formData.append("text", newMessage);
     formData.append("conversationId", currentChat._id);
@@ -179,7 +178,7 @@ const UserInbox = () => {
     socketId.emit("sendMessage", {
       senderId: user._id,
       receiverId,
-      images: e,
+      images: file, // Use 'file' instead of 'e'
     });
 
     try {
@@ -190,7 +189,7 @@ const UserInbox = () => {
           },
         })
         .then((res) => {
-          setImages();
+          setImages(); // Clear images after successful upload
           setMessages([...messages, res.data.message]);
           updateLastMessageForImage();
         });

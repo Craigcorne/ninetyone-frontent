@@ -126,13 +126,15 @@ const AllProducts = () => {
 
   const rows =
     products &&
-    products?.map((item) => ({
-      id: item._id,
-      name: item.name,
-      price: "Ksh " + item.discountPrice,
-      Stock: item.stock,
-      sold: item?.sold_out,
-    }));
+    products
+      ?.map((item) => ({
+        id: item._id,
+        name: item.name,
+        price: "Ksh " + item.discountPrice,
+        Stock: item.stock,
+        sold: item?.sold_out,
+      }))
+      .reverse();
 
   return (
     <>

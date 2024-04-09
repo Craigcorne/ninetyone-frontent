@@ -30,6 +30,7 @@ import Loader from "../Layout/Loader";
 const ProductDetails = ({ data, isEvent }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
+  const { statements } = useSelector((state) => state.statements);
   const { compare } = useSelector((state) => state.compare);
   const { user, isAuthenticated } = useSelector((state) => state.user);
   const { products } = useSelector((state) => state.products);
@@ -38,13 +39,16 @@ const ProductDetails = ({ data, isEvent }) => {
   const [select, setSelect] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedPrice, setSelectedPrice] = useState(0);
+  const [exchangeRate, setExchangeRate] = useState(0);
   const [selectedQuantity, setSelectedQuantity] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   useEffect(() => {
     setLoading(true);
+
     dispatch(getAllProductsShop(data && data?.shop._id));
     if (wishlist && wishlist.find((i) => i._id === data?._id)) {
       setClick(true);
@@ -53,6 +57,36 @@ const ProductDetails = ({ data, isEvent }) => {
     }
     setLoading(false);
   }, [data, wishlist]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${server}/statements/get-first-statements`
+        );
+        const { success, exchangeRate } = response.data;
+
+        if (success) {
+          setExchangeRate(exchangeRate);
+          console.log("this is the", response.data);
+          console.log("Exchange rate:", exchangeRate);
+        } else {
+          console.error("Failed to fetch statements");
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (statements && statements.length > 0) {
+    const exchangeRate = statements[0].exchangeRate;
+    console.log("Exchange Rate:", exchangeRate);
+  } else {
+    console.log("No statements found in the state.");
+  }
 
   const incrementCount = () => {
     if (data.sizes.length > 1 && selectedSize === "") {
@@ -74,7 +108,6 @@ const ProductDetails = ({ data, isEvent }) => {
     }
   };
   useEffect(() => {
-    // Whenever selectedSize changes, reset the count to 1
     setCount(1);
   }, [selectedSize]);
 
@@ -93,9 +126,12 @@ const ProductDetails = ({ data, isEvent }) => {
   };
 
   const addToCartHandler = (id) => {
-    const isItemExists = cart && cart.find((i) => i._id === id);
+    const isItemExists =
+      cart &&
+      cart.find((item) => item._id === id && item.size === selectedSize);
+
     if (isItemExists) {
-      toast.error("Item already in cart!");
+      toast.error("Item already in cart with the selected size!");
     } else {
       if (data.stock < 1) {
         toast.error("Product stock limited!");
@@ -109,6 +145,7 @@ const ProductDetails = ({ data, isEvent }) => {
           discountPrice: selectedSize ? selectedPrice : data.discountPrice,
           selectedQuantity: selectedSize ? selectedQuantity : data.stock,
         };
+
         dispatch(addTocart(cartData));
         toast.success("Item added to cart successfully!");
       }
@@ -188,21 +225,47 @@ const ProductDetails = ({ data, isEvent }) => {
     }
   };
 
-  const shareToSocialMedia = (value) => {
-    // Check if the navigator supports the share API
+  const shareToSocialMedia = (value, imageUrl) => {
     if (navigator.share) {
-      navigator
-        .share({
-          title: "Product Link",
-          text: "Check out this product!",
-          url: value,
-        })
-        .then(() => {
-          console.log("Product link shared successfully!");
-        })
-        .catch((error) => {
-          console.error("Error sharing product link:", error);
-        });
+      const shareData = {
+        title: "Check out this product!",
+        text: "Product Link: " + value,
+        url: value,
+      };
+
+      const files = [];
+
+      // Fetch and add the image file if imageUrl is provided
+      if (imageUrl) {
+        fetch(imageUrl)
+          .then((response) => response.arrayBuffer())
+          .then((imageBuffer) => {
+            const imageFile = new File([imageBuffer], "product_image.jpg", {
+              type: "image/jpeg",
+            });
+
+            files.push(imageFile);
+            shareData.files = files;
+
+            navigator
+              .share(shareData)
+              .then(() => {
+                console.log("Product link and image shared successfully!");
+              })
+              .catch((error) => {
+                console.error("Error sharing:", error);
+              });
+          })
+          .catch((error) => {
+            console.error("Error fetching image:", error);
+
+            // Share text only if there is an error fetching the image
+            navigator.share(shareData);
+          });
+      } else {
+        // Share text only if no imageUrl is provided
+        navigator.share(shareData);
+      }
     } else {
       // Fallback to copying the link to clipboard
       copyToClipboard(value);
@@ -308,12 +371,12 @@ const ProductDetails = ({ data, isEvent }) => {
                         : `Out of Stock`}
                     </p>
                     {/* Display Sizes */}
-                    {data.sizes && data.sizes.length > 1 && (
+                    {data.sizes && data.sizes.length >= 1 && (
                       <div className="block mt-3 items-center">
                         <span className="mr-3">Size:</span>
                         <div className="flex flex-wrap gap-2">
                           {data.sizes &&
-                            data.sizes.length > 1 &&
+                            data.sizes.length >= 1 &&
                             data.sizes.map((size, index) => (
                               <button
                                 key={index}
@@ -328,7 +391,10 @@ const ProductDetails = ({ data, isEvent }) => {
                                 }`}
                                 onClick={() => {
                                   setSelectedSize(size.name);
-                                  setSelectedPrice(size.price);
+                                  const roundedPrice = Math.round(
+                                    size.dPrice * exchangeRate
+                                  );
+                                  setSelectedPrice(roundedPrice || size.price);
                                   setSelectedQuantity(size.stock);
                                 }}
                                 disabled={
@@ -459,7 +525,8 @@ const ProductDetails = ({ data, isEvent }) => {
                               isEvent === true
                                 ? `/product/${data._id}?isEvent=true`
                                 : `/product/${data._id}`
-                            }`
+                            }`,
+                            data.images && data.images[select]?.url
                           )
                         }
                         className="cursor-pointer"

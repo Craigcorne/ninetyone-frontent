@@ -14,7 +14,7 @@ const ShopSettings = () => {
   const [description, setDescription] = useState(
     seller && seller.description ? seller.description : ""
   );
-  const [instaShop, setInstaShop] = useState(seller && seller.instaShop);
+  const [phoneNumber, setPhoneNumber] = useState(seller && seller.phoneNumber);
 
   const dispatch = useDispatch();
 
@@ -52,8 +52,9 @@ const ShopSettings = () => {
       .put(
         `${server}/shop/update-seller-info`,
         {
-          name,
+          name: capitalizeFirstLetter(name),
           description,
+          phoneNumber,
         },
         { withCredentials: true }
       )
@@ -65,7 +66,9 @@ const ShopSettings = () => {
         toast.error(error.response.data.message);
       });
   };
-
+  const capitalizeFirstLetter = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
   return (
     <div className="w-full min-h-screen flex flex-col items-center">
       <div className="flex w-full 800px:w-[80%] flex-col justify-center my-5">
@@ -127,13 +130,13 @@ const ShopSettings = () => {
           </div>
           <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
             <div className="w-full pl-[3%]">
-              <label className="block pb-2">Shop InstaShop</label>
+              <label className="block pb-2">Phone Number</label>
             </div>
             <input
-              type="name"
-              placeholder={seller?.instaShop}
-              value={instaShop}
-              onChange={(e) => setInstaShop(e.target.value)}
+              type="number"
+              placeholder={seller?.phoneNumber}
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
               className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
               required
             />

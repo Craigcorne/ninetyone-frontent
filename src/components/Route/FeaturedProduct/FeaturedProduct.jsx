@@ -20,7 +20,7 @@ const FeaturedProduct = () => {
     <div>
       <div className={`${styles.section}`}>
         <div className={`${styles.heading}`}>
-          <h1>Featured Products</h1>
+          <h1>Latest Products</h1>
         </div>
 
         <div className="overflow-x-auto flex space-x-4 mb-12 border-0 ">

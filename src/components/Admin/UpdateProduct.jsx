@@ -258,7 +258,7 @@ const AdminEditProduct = () => {
           />
         )}
         <div className="w-[80px] 800px:w-[330px]">
-          <AdminSideBar active={5} />
+          <AdminSideBar active={3} />
         </div>
         <div className="w-[90%] 800px:w-[50%] bg-white shadow mx-auto rounded p-6">
           <h1 className="text-2xl font-bold">Edit Product</h1>

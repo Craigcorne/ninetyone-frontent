@@ -33,13 +33,23 @@ const ProductsPage = () => {
   };
 
   useEffect(() => {
-    if (categoryData === null) {
-      const d = allProducts;
-      setData(d);
-    } else {
-      const d =
-        allProducts && allProducts.filter((i) => i.category === categoryData);
-      setData(d);
+    if (allProducts) {
+      if (categoryData === null) {
+        const inStockProducts = allProducts.filter(
+          (product) => product.stock > 0
+        );
+        setData(inStockProducts);
+      } else {
+        const categoryProducts = allProducts.filter(
+          (product) => product.category === categoryData
+        );
+
+        const inStockCategoryProducts = categoryProducts.filter(
+          (product) => product.stock > 0
+        );
+
+        setData(inStockCategoryProducts);
+      }
     }
   }, [allProducts, categoryData, categoriesData]);
 

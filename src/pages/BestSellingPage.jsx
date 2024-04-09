@@ -7,7 +7,6 @@ import Loader from "../components/Layout/Loader";
 import ProductCard from "../components/Route/ProductCard/ProductCard";
 import styles from "../styles/styles";
 import Meta from "../components/Meta";
-import Footer from "../components/Layout/Footer";
 import { server } from "../server";
 
 const BestSellingPage = () => {
@@ -94,7 +93,6 @@ const BestSellingPage = () => {
                 data.map((i, index) => <ProductCard data={i} key={index} />)}
             </div>
           </div>
-          <Footer />
         </div>
       )}
     </>

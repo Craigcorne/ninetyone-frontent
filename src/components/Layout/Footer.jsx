@@ -8,7 +8,6 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
-
 import { Link } from "react-router-dom";
 import {
   footercompanyLinks,
@@ -82,6 +81,7 @@ const Footer = () => {
       e.stopPropagation();
     }
   };
+
   return (
     <>
       <div className="bg-[#000] text-white">
@@ -111,7 +111,7 @@ const Footer = () => {
                 className="bg-[#56d879] hover:bg-teal-500 duration-300 px-5 py-2.5 rounded-md text-whie md:w-auto w-full"
               >
                 {loading ? (
-                  <p className="flex ml-[30%]">
+                  <p className="flex ml-[25%]">
                     <Spinner /> sending...
                   </p>
                 ) : (
@@ -129,6 +129,7 @@ const Footer = () => {
               alt=""
               style={{ filter: "brightness(0) invert(1)" }}
             />
+
             <br />
             <p>The home and elements needed to create beautiful products.</p>
             <div className="flex items-center mt-[15px]">
@@ -153,7 +154,7 @@ const Footer = () => {
                 className="icon youtube-icon"
               />
               <a
-                href="https://api.whatsapp.com/send?phone=254741895028&text=Hey%20NinetyOne,%20what%20do%20I%20add"
+                href="https://api.whatsapp.com/send?phone=254751667713&text=Hey%20NinetyOne,%20what%20do%20I%20add"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="icon whatsapp-icon"
@@ -260,7 +261,7 @@ const Footer = () => {
             </p>
             <div class="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
               <a
-                href="https://onlineshop-2xjp.vercel.app/"
+                href="ww"
                 class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
               >
                 <svg
@@ -286,7 +287,7 @@ const Footer = () => {
                 </div>
               </a>
               <a
-                href="https://onlineshop-2xjp.vercel.app/"
+                href="ww"
                 class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
               >
                 <svg
@@ -314,9 +315,10 @@ const Footer = () => {
             </div>
           </div>
         </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 text-center pt-2 text-white-400 text-sm pb-8 mb-[50px] lg:mb-0">
           <span>
-            &copy; {new Date().getFullYear()} eShop. All rights reserved.
+            &copy; {new Date().getFullYear()} NinetyOne. All rights reserved.
           </span>
           <span>Terms · Privacy Policy</span>
           <div className="sm:block flex items-center justify-center w-full">
@@ -327,7 +329,7 @@ const Footer = () => {
           </div>
         </div>
         <a
-          href="https://api.whatsapp.com/send?phone=254712012113&text=Hey%20Brams,%20what%20do%20I%20add"
+          href="https://api.whatsapp.com/send?phone=254751667713&text=Hey%20NinetyOne,%20what%20do%20I%20add"
           target="_blank"
           rel="noopener noreferrer"
           className="fixed bottom-16 lg:bottom-4 right-4 bg-green-500 text-white rounded-full p-3 hover:bg-green-600 transition duration-300 z-10 flex items-center justify-center group appear__smoothly"

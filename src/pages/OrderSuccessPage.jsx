@@ -24,7 +24,7 @@ const OrderSuccessPage = () => {
     if (user.isAuthenticated === false) {
       navigate("/searchorder");
     } else if (user.isAuthenticated === true) {
-      navigate("/profile?active=2");
+      navigate("/profile?active=3");
     }
   };
 

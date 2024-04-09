@@ -8,6 +8,7 @@ import { CiMoneyBill, CiSettings } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import { BiMessageSquareDetail } from "react-icons/bi";
 import { HiOutlineReceiptRefund } from "react-icons/hi";
+import { RiAuctionLine } from "react-icons/ri";
 
 const DashboardSideBar = ({ active }) => {
   return (
@@ -87,7 +88,7 @@ const DashboardSideBar = ({ active }) => {
               active === 5 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
-            All Events
+            All FlashSale
           </h5>
         </Link>
       </div>
@@ -107,6 +108,21 @@ const DashboardSideBar = ({ active }) => {
           </h5>
         </Link>
       </div>
+      <div className="w-full flex items-center p-4">
+        <Link to="/dashboard-auction" className="w-full flex items-center">
+          <RiAuctionLine
+            size={30}
+            color={`${active === 7 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 7 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+            Auction
+          </h5>
+        </Link>
+      </div>
 
       <div className="w-full flex items-center p-4">
         <Link
@@ -115,11 +131,11 @@ const DashboardSideBar = ({ active }) => {
         >
           <CiMoneyBill
             size={30}
-            color={`${active === 7 ? "crimson" : "#555"}`}
+            color={`${active === 8 ? "crimson" : "#555"}`}
           />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 7 ? "text-[crimson]" : "text-[#555]"
+              active === 8 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
             Withdraw Money
@@ -131,11 +147,11 @@ const DashboardSideBar = ({ active }) => {
         <Link to="/dashboard-messages" className="w-full flex items-center">
           <BiMessageSquareDetail
             size={30}
-            color={`${active === 8 ? "crimson" : "#555"}`}
+            color={`${active === 9 ? "crimson" : "#555"}`}
           />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 8 ? "text-[crimson]" : "text-[#555]"
+              active === 9 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
             Shop Inbox
@@ -147,11 +163,11 @@ const DashboardSideBar = ({ active }) => {
         <Link to="/dashboard-coupouns" className="w-full flex items-center">
           <AiOutlineGift
             size={30}
-            color={`${active === 9 ? "crimson" : "#555"}`}
+            color={`${active === 10 ? "crimson" : "#555"}`}
           />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 9 ? "text-[crimson]" : "text-[#555]"
+              active === 10 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
             Discount Codes
@@ -163,11 +179,11 @@ const DashboardSideBar = ({ active }) => {
         <Link to="/dashboard-refunds" className="w-full flex items-center">
           <HiOutlineReceiptRefund
             size={30}
-            color={`${active === 10 ? "crimson" : "#555"}`}
+            color={`${active === 11 ? "crimson" : "#555"}`}
           />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 10 ? "text-[crimson]" : "text-[#555]"
+              active === 11 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
             Refunds
@@ -179,11 +195,11 @@ const DashboardSideBar = ({ active }) => {
         <Link to="/settings" className="w-full flex items-center">
           <CiSettings
             size={30}
-            color={`${active === 11 ? "crimson" : "#555"}`}
+            color={`${active === 12 ? "crimson" : "#555"}`}
           />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 11 ? "text-[crimson]" : "text-[#555]"
+              active === 12 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
             Settings

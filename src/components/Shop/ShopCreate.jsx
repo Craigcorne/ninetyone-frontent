@@ -63,7 +63,9 @@ const ShopCreate = () => {
     },
     validationSchema: shopSignupSchema,
     onSubmit: async (values) => {
-      const name = values.name;
+      const name =
+        values.name.charAt(0).toUpperCase() +
+        values.name.slice(1).toLowerCase();
       const email = values.email;
       const phoneNumber = values.phoneNumber;
       const address = values.address;

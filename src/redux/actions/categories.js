@@ -1,4 +1,5 @@
 import axios from "axios";
+import { server } from "../../server";
 
 export const DELETE_CATEGORY = "DELETE_CATEGORY";
 
@@ -23,5 +24,23 @@ export const deleteCategoryThunk = (categoryId) => async (dispatch) => {
     console.log("Category deleted successfully");
   } catch (error) {
     console.error("Error:", error.response.data);
+  }
+};
+export const getAllCategory = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getAllcategoryRequest",
+    });
+
+    const { data } = await axios.get(`${server}/category/categories`);
+    dispatch({
+      type: "getAllcategorySuccess",
+      payload: data.categories,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllcategoryFailed",
+      payload: error.response.data.message,
+    });
   }
 };

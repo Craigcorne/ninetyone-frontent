@@ -52,9 +52,11 @@ export const getAllProductsShop = (id) => async (dispatch) => {
     const { data } = await axios.get(
       `${server}/product/get-all-products-shop/${id}`
     );
+    const reversedProducts = data.products.reverse();
+
     dispatch({
       type: "getAllProductsShopSuccess",
-      payload: data.products,
+      payload: reversedProducts,
     });
   } catch (error) {
     dispatch({

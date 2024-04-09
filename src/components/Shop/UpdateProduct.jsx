@@ -260,7 +260,7 @@ const EditProduct = () => {
           />
         )}
         <div className="w-[80px] 800px:w-[330px]">
-          <DashboardSideBar active={5} />
+          <DashboardSideBar active={3} />
         </div>
         <div className="w-[90%] 800px:w-[50%] bg-white shadow mx-auto rounded p-6">
           <h1 className="text-2xl font-bold">Edit Product</h1>

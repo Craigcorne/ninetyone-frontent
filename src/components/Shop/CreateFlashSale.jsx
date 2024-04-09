@@ -90,7 +90,7 @@ const CreateFlashSale = () => {
       <DashboardHeader />
       <div className="flex items-stretch">
         <div className="w-[80px] 800px:w-[330px]">
-          <DashboardSideBar active={5} />
+          <DashboardSideBar active={6} />
         </div>
         <div className="w-[90%] 800px:w-[50%] bg-white shadow mx-auto rounded p-6">
           <h5 className="text-[30px] font-Poppins text-center">

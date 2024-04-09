@@ -21,6 +21,19 @@ const Payment = () => {
   const [open, setOpen] = useState(false);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
+  const [disappear, setDisappear] = useState(false);
+  const [balance, setBalance] = useState(0);
+  const [inputValue, setInputValue] = useState("");
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+    console.log("this is the input", inputValue);
+  };
+
+  const handleSubmit = () => {
+    setBalance(inputValue);
+    setDisappear(true);
+  };
 
   const navigate = useNavigate();
 
@@ -61,9 +74,12 @@ const Payment = () => {
     orderNo: orderData?.orderNumber,
     shippingAddress: orderData?.shippingAddress,
     user: user && user,
-    totalPrice: orderData?.totalPrice,
+    totalPrice: orderData?.totalPrice - balance,
     shippingPrice: orderData.shippingPrice,
     discount: orderData.discountPrice,
+    discShop: orderData?.discShop,
+    referee: orderData?.referee,
+    balance: balance,
     date: Date.now(),
   };
 
@@ -157,6 +173,44 @@ const Payment = () => {
     setLoading1(false);
   };
 
+  const mpesaPaymentHandler = async (e) => {
+    e.preventDefault();
+    setLoading1(true);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    order.paymentInfo = {
+      type: "Mpesa",
+      status: "succeeded",
+    };
+
+    try {
+      await axios
+        .post(`${server}/order/create-order`, order, config)
+        .then((res) => {
+          setOpen(false);
+          navigate("/order/success");
+          toast.success("Your Payment is Successful, and the order is placed");
+          localStorage.setItem("cartItems", JSON.stringify([]));
+          localStorage.setItem("latestOrder", JSON.stringify([]));
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        });
+
+      try {
+        await axios.post(`${server}/order/sendmyorder`, order, config);
+      } catch (error) {
+        loading1(false);
+        console.log(error);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="w-full flex flex-col items-center py-8">
       <div className="w-[90%] 1000px:w-[70%] block 800px:flex">
@@ -168,8 +222,16 @@ const Payment = () => {
             onApprove={onApprove}
             createOrder={createOrder}
             cashOnDeliveryHandler={cashOnDeliveryHandler}
+            mpesaPaymentHandler={mpesaPaymentHandler}
             loading1={loading1}
             loading2={loading2}
+            disappear={disappear}
+            balance={balance}
+            setBalance={setBalance}
+            handleSubmit={handleSubmit}
+            handleInputChange={handleInputChange}
+            inputValue={inputValue}
+            setInputValue={setInputValue}
           />
         </div>
         <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
@@ -193,9 +255,16 @@ const PaymentInfo = ({
   setOpen,
   onApprove,
   createOrder,
+  balance,
+  mpesaPaymentHandler,
   cashOnDeliveryHandler,
   loading1,
   loading2,
+  disappear,
+  handleSubmit,
+  handleInputChange,
+  inputValue,
+  setInputValue,
 }) => {
   const [select, setSelect] = useState(1);
   const [orderData, setOrderData] = useState([]);
@@ -209,60 +278,50 @@ const PaymentInfo = ({
   const [paymentDone, setPaymentDone] = useState(false);
   const [requestID, setRequestID] = useState("");
   const [callbackData, setCallbackData] = useState("");
+  const [result, setResult] = useState(false);
+  const [openn, setOpenn] = useState(false);
+  const [msape, setMsape] = useState(false);
+  const [mpesaCode, setMpesaCode] = useState("");
+  const [confirmed, setConfirmed] = useState("");
 
   useEffect(() => {
     const orderData = JSON.parse(localStorage.getItem("latestOrder"));
     setOrderData(orderData);
   }, []);
 
+  const order = {
+    cart: orderData?.cart,
+    orderNo: orderData?.orderNumber,
+    shippingAddress: orderData?.shippingAddress,
+    shippingPrice: orderData.shippingPrice,
+    user: user && user,
+    totalPrice: orderData?.totalPrice,
+    date: Date.now(),
+    discount: orderData.discountPrice,
+    discShop: orderData?.discShop,
+    referee: orderData?.referee,
+  };
+
   useEffect(() => {
     console.log("this is the", requestID);
+
     if (requestID && callbackData) {
       if (callbackData.TinyPesaID !== requestID) {
         setErrorMessage(null);
       }
+
       if (
         callbackData.TinyPesaID === requestID &&
         callbackData.ResultCode === 0
       ) {
-        const config = {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
-        const order = {
-          cart: orderData?.cart,
-          orderNo: orderData?.orderNumber,
-          shippingAddress: orderData?.shippingAddress,
-          shippingPrice: orderData.shippingPrice,
-          user: user && user,
-          totalPrice: orderData?.totalPrice,
-          date: Date.now(),
-        };
-
-        order.paymentInfo = {
-          type: "Mpesa",
-          status: "succeeded",
-        };
-
         axios
-          .post(`${server}/order/create-order`, order, config)
-          .then((res) => {
-            setOpen(false);
-            navigate("/order/success");
-            toast.success("Your Payment is Sucessful and order placed");
-            localStorage.setItem("cartItems", JSON.stringify([]));
-            localStorage.setItem("latestOrder", JSON.stringify([]));
-            setTimeout(() => {
-              window.location.reload();
-            }, 2000);
+          .get(`${server}/tiny/checkResultId/${requestID}`)
+          .then((response) => {
+            setResult(response.data.exists);
+          })
+          .catch((error) => {
+            console.error("Error fetching result:", error);
           });
-        try {
-          axios.post(`${server}/order/sendmyorder`, order, config);
-        } catch (error) {
-          loading1(false);
-          console.log(error);
-        }
       } else if (
         callbackData.TinyPesaID === requestID &&
         callbackData.ResultCode === 1032
@@ -276,7 +335,7 @@ const PaymentInfo = ({
         callbackData.ResultCode === 2001
       ) {
         setSuccessMessage(null);
-        setErrorMessage("You entered wrong PIN");
+        setErrorMessage("You entered the wrong PIN");
       } else if (
         callbackData.TinyPesaID === requestID &&
         callbackData.ResultCode === 1037
@@ -319,8 +378,43 @@ const PaymentInfo = ({
   setTimeout(() => {
     clearTimeout(timeoutId);
   }, 30000);
+  const handleMpesa = (event) => {
+    setMpesaCode(event.target.value);
+  };
 
-  const amount1 = Math.round(orderData.totalPrice);
+  const handleGet = () => {
+    const confirmUpperCase = mpesaCode.toUpperCase();
+    setMsape(false);
+    setMpesaCode("");
+    setConfirmed(confirmUpperCase);
+
+    axios
+      .get(`${server}/tiny/checkRefcode/${confirmUpperCase}/${requestID}`)
+      .then((res) => {
+        const exists = res.data.exists;
+        setResult(exists);
+        if (exists) {
+          toast.success("We've found the Transaction ");
+        }
+
+        if (!exists) {
+          toast.error(
+            "Can Not find This Transaction Forward Your Message to 0712012113 or 0726327352"
+          );
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching result:", error);
+        toast.error(
+          "Can Not find This Transaction Forward Your Message to 0712012113 or 0726327352"
+        );
+      });
+  };
+
+  const cash = orderData?.totalPrice - balance;
+
+  const amount1 = Math.round(cash);
+  console.log(amount1);
 
   const navigate = useNavigate();
 
@@ -333,35 +427,58 @@ const PaymentInfo = ({
     onSubmit: async (values) => {
       const phone = values.phone;
       const amount = amount1;
+
       await setLoading(true);
-      await axios
-        .post(
+
+      try {
+        const response = await axios.post(
           `${server}/tiny/tinystk`,
           { phone, amount },
           { withCredentials: true }
-        )
-        .then((res) => {
-          setRequestID(res.data.request_id);
-          setErrorMessage(null);
-          toast.success("Stk Pushed to your phone");
-          setLoading(false);
-          setSuccess(true);
-          setError(false);
-          fetchCallbackData();
-          setSuccessMessage(
-            "Please put Mpesa PIN in your phone to complete Payment"
+        );
+
+        setRequestID(response.data.request_id);
+        setErrorMessage(null);
+        toast.success("Stk Pushed to your phone");
+        setLoading(false);
+        setSuccess(true);
+        setError(false);
+        fetchCallbackData();
+        setSuccessMessage(
+          "Please put Mpesa PIN in your phone to complete Payment"
+        );
+
+        // Set up a timeout to fetch callback status after 30 seconds
+        const timeoutId = setTimeout(() => {
+          setMsape(true);
+          axios
+            .get(`${server}/tiny/checkResultId/${response.data.request_id}`)
+            .then((res) => {
+              setResult(res.data.exists);
+            })
+            .catch((error) => {
+              console.error("Error fetching result:", error);
+            });
+        }, 30000);
+
+        return () => {
+          clearTimeout(timeoutId);
+        };
+      } catch (error) {
+        setError(true);
+        if (
+          error.response &&
+          error.response.data.message === "Request cancelled by user"
+        ) {
+          setErrorMessage("You cancelled the transaction");
+        } else {
+          setErrorMessage(
+            error.response ? error.response.data.message : "An error occurred"
           );
-        })
-        .catch((error) => {
-          setError(true);
-          if (error.response.data.message === "Request cancelled by user") {
-            setErrorMessage("You cancelled the transaction");
-          } else {
-            setErrorMessage(error.response.data.message);
-          }
-          setLoading(false);
-          setSuccess(false);
-        });
+        }
+        setLoading(false);
+        setSuccess(false);
+      }
     },
   });
 
@@ -382,6 +499,70 @@ const PaymentInfo = ({
       {/* select buttons */}
       {/* mpesa payment */}
       <div>
+        {user.availableBalance >= 1 && !disappear ? (
+          <>
+            <div
+              className={`${styles.inputContainer} p-3 w-[50%] relative flex items-center justify-between`}
+            >
+              <label className="text-[18px] pl-2 font-[600] text-[#000000b1]">
+                Balance: Kes {user.availableBalance}
+              </label>
+
+              <button
+                type="submit"
+                onClick={() => setOpenn(true)}
+                className={`${styles.submitButton} bg-blue-500 text-white p-1 rounded ml-20`}
+              >
+                Use
+              </button>
+            </div>
+
+            {openn && (
+              <div className="w-full h-screen z-[9999] fixed top-0 left-0 flex items-center justify-center bg-[#0000004e]">
+                <div className={`w-[90%] max-w-sm bg-white shadow rounded p-3`}>
+                  <div className="w-full flex justify-end">
+                    <RxCross1
+                      size={25}
+                      onClick={() => setOpenn(false)}
+                      className="cursor-pointer"
+                    />
+                  </div>
+
+                  <div>
+                    <h3 className="text-[18px] font-Poppins text-center font-[600]">
+                      Pay With Your Balance
+                    </h3>
+                    <form onSubmit={handleSubmit}>
+                      <div>
+                        <label>
+                          Amount<span className="text-red-500">*</span>
+                        </label>
+
+                        <input
+                          type="number"
+                          placeholder={user.availableBalance}
+                          className={`${styles.input} p-3 w-[50%] text-[#444]`}
+                          onChange={handleInputChange}
+                          value={inputValue}
+                          max={user.availableBalance}
+                          maxLength={6}
+                          required
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        className={`${styles.button} mt-3 text-white`}
+                      >
+                        Use
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        ) : null}
         <div className="flex w-full pb-5 border-b mb-2">
           <div
             className="w-[25px] h-[25px] rounded-full bg-transparent border-[3px] border-[#1d1a1ab4] relative flex items-center justify-center"
@@ -392,116 +573,185 @@ const PaymentInfo = ({
             ) : null}
           </div>
           <h4 className="text-[18px] pl-2 font-[600] text-[#000000b1]">
-            Pay with Mpesa
+            {!result && amount1 === 0 ? "Use Your Balance" : "Pay with Mpesa"}
           </h4>
         </div>
 
         {/* pay with payement */}
         {select === 1 ? (
           <>
-            <div className="">
-              {errorMessage && (
-                <div
-                  className="bg-red-100 border block border-red-400 text-red-700 px-1 py-1 text-center mb-2 rounded relative"
-                  role="alert"
-                >
-                  <p>{errorMessage}</p>
-                  <p className="text-xs text-gray-900 dark:text-white">
-                    If your account has been debited please call or live chat us
-                    0712012113
-                  </p>
+            {!result && amount1 > 0 ? (
+              <>
+                <div className="">
+                  {errorMessage && (
+                    <div
+                      className="bg-red-100 border block border-red-400 text-red-700 px-1 py-1 text-center mb-2 rounded relative"
+                      role="alert"
+                    >
+                      <p>{errorMessage}</p>
+                      <p className="text-xs text-gray-900 dark:text-white">
+                        If your account has been debited please call or live
+                        chat us 0712012113
+                      </p>
 
-                  <p className="text-xs text-gray-900 dark:text-white">
-                    (Refresh this page to send stk push again)
-                  </p>
-                </div>
-              )}
-              {success && (
-                <div
-                  className="bg-green-100 border border-green-400 text-green-700 px-1 py-1 text-center mb-2 rounded relative"
-                  role="alert"
-                >
-                  <p>{successMessage}</p>
-                </div>
-              )}
-            </div>
-            <div className=" w-ful lg:flex sm:block border-b appear__smoothly">
-              <div className="items-center">
-                <img
-                  className="w-[125px] h-[125px] m-auto"
-                  src={mpesa1}
-                  alt="mpesaImg"
-                />
-              </div>
-              <form className="pt-2 " onSubmit={formik.handleSubmit}>
-                <div className="w-full flex pb-3">
-                  <label className=" w-[50%] pb-2 mt-[11px]">
-                    Total Amount
-                  </label>
-                  <div className="w-[50%] text-[18px] font-[600] pb-2 mt-[11px]">
-                    <NumericFormat
-                      value={amount1}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"Ksh. "}
-                    />
-                  </div>
-                </div>
-
-                <div className="w-full flex pb-3">
-                  <label className=" w-[50%] pb-2 mt-[11px]">
-                    Phone Number
-                  </label>
-                  <div>
-                    <input
-                      placeholder={
-                        formik.values.phone === ""
-                          ? "0712✱✱✱689"
-                          : formik.values.phone
-                      }
-                      // placeholder="07✱✱✱✱✱✱✱✱"
-                      className={`${styles.input} p-3 w-[50%] text-[#444]`}
-                      onChange={formik.handleChange("phone")}
-                      onBlur={formik.handleBlur("phone")}
-                      value={formik.values.phone}
-                    />
-                    <div className="text-red-500 text-xs">
-                      {formik.touched.phone && formik.errors.phone}
+                      <p className="text-xs text-gray-900 dark:text-white">
+                        (Refresh this page to send stk push again)
+                      </p>
                     </div>
-                  </div>
+                  )}
+                  {success && (
+                    <div
+                      className="bg-green-100 border border-green-400 text-green-700 px-1 py-1 text-center mb-2 rounded relative"
+                      role="alert"
+                    >
+                      <p>{successMessage}</p>
+                    </div>
+                  )}
                 </div>
-                <div>
+                <div className=" w-ful lg:flex sm:block border-b appear__smoothly">
+                  <div className="items-center">
+                    <img
+                      className="w-[125px] h-[125px] m-auto"
+                      src={mpesa1}
+                      alt="mpesaImg"
+                    />
+                  </div>
+                  <form className="pt-2 " onSubmit={formik.handleSubmit}>
+                    <div className="w-full flex pb-3">
+                      <label className=" w-[50%] pb-2 mt-[11px]">
+                        Total Amount
+                      </label>
+                      <div className="w-[50%] text-[18px] font-[600] pb-2 mt-[11px]">
+                        <NumericFormat
+                          value={amount1}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"Ksh. "}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="w-full flex pb-3">
+                      <label className=" w-[50%] pb-2 mt-[11px]">
+                        Phone Number
+                      </label>
+                      <div>
+                        <input
+                          placeholder={
+                            formik.values.phone === ""
+                              ? "0712✱✱✱689"
+                              : formik.values.phone
+                          }
+                          // placeholder="07✱✱✱✱✱✱✱✱"
+                          className={`${styles.input} p-3 w-[50%] text-[#444]`}
+                          onChange={formik.handleChange("phone")}
+                          onBlur={formik.handleBlur("phone")}
+                          value={formik.values.phone}
+                        />
+                        <div className="text-red-500 text-xs">
+                          {formik.touched.phone && formik.errors.phone}
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <button
+                        disabled={
+                          loading ||
+                          success ||
+                          validating ||
+                          error ||
+                          amount1 > 250000
+                        }
+                        type="submit"
+                        className="group relative w-full flex justify-center mb-4 py-3 px-4 border border-transparent text-[16px] font-[600] rounded-[5px] text-white !bg-[#12b32a] hover:!bg-[#12b32a] disabled:!bg-[#a8deb0] disabled:cursor-not-allowed"
+                      >
+                        {loading ? (
+                          <p className="flex">
+                            <Spinner /> Processing...
+                          </p>
+                        ) : (
+                          <p>
+                            {validating
+                              ? "Validating Payment..."
+                              : error
+                              ? `${errorMessage}`
+                              : amount1 > 150000
+                              ? "Amout exceed Mpesa limt"
+                              : "Pay Now"}
+                          </p>
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </>
+            ) : (
+              <div className="w-full flex">
+                <form
+                  className="w-full appear__smoothly"
+                  onSubmit={mpesaPaymentHandler}
+                >
                   <button
-                    disabled={
-                      loading ||
-                      success ||
-                      validating ||
-                      error ||
-                      amount1 > 250000
-                    }
                     type="submit"
-                    className="group relative w-full flex justify-center mb-4 py-3 px-4 border border-transparent text-[16px] font-[600] rounded-[5px] text-white !bg-[#12b32a] hover:!bg-[#12b32a] disabled:!bg-[#a8deb0] disabled:cursor-not-allowed"
+                    disabled={loading1}
+                    className={`${styles.button} !bg-[#12b32a] text-[#fff] h-[45px] rounded-[5px] cursor-pointer text-[18px] font-[600]`}
                   >
-                    {loading ? (
-                      <p className="flex">
+                    {loading1 ? (
+                      <p className="flex mx-3">
                         <Spinner /> Processing...
                       </p>
                     ) : (
-                      <p>
-                        {validating
-                          ? "Validating Payment..."
-                          : error
-                          ? `${errorMessage}`
-                          : amount1 > 150000
-                          ? "Amout exceed Mpesa limt"
-                          : "Pay Now"}
-                      </p>
+                      <p className="">Complete Order</p>
                     )}
                   </button>
-                </div>
-              </form>
-            </div>
+                </form>
+              </div>
+            )}
           </>
+        ) : null}
+
+        {msape && !result ? (
+          <div className="w-full h-screen z-[9999] fixed top-0 left-0 flex items-center justify-center bg-[#0000004e]">
+            <div className={`w-[90%] max-w-sm bg-white shadow rounded p-3`}>
+              <div className="w-full flex justify-end">
+                <RxCross1
+                  size={25}
+                  onClick={() => setMsape(false)}
+                  className="cursor-pointer"
+                />
+              </div>
+
+              <div>
+                <h3 className="text-[18px] font-Poppins text-center font-[600]">
+                  Already Paid? Submit Your Mpesa Code
+                </h3>
+                <form onSubmit={handleGet}>
+                  <div>
+                    <label>
+                      Mpesa Code<span className="text-red-500">*</span>
+                    </label>
+
+                    <input
+                      type="text"
+                      placeholder={"SAST244GF6"}
+                      className={`${styles.input} p-3 w-[50%] text-[#444]`}
+                      onChange={handleMpesa}
+                      value={mpesaCode}
+                      maxLength={10}
+                      required
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className={`${styles.button} mt-3 text-white bg-[#12b32a]`}
+                  >
+                    Submit
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
         ) : null}
       </div>
 
@@ -643,7 +893,7 @@ const PaymentInfo = ({
   );
 };
 
-const CartData = ({ orderData }) => {
+const CartData = ({ orderData, totalPrice }) => {
   const shipping = orderData?.shippingPrice?.toFixed(2);
   return (
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
@@ -689,7 +939,7 @@ const CartData = ({ orderData }) => {
       </div>
       <h5 className="text-[18px] font-[600] text-end pt-3">
         <NumericFormat
-          value={orderData?.totalPrice}
+          value={totalPrice}
           displayType={"text"}
           thousandSeparator={true}
           prefix={"Ksh. "}

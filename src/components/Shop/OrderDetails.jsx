@@ -13,6 +13,8 @@ const OrderDetails = () => {
   const { seller } = useSelector((state) => state.seller);
   const dispatch = useDispatch();
   const [status, setStatus] = useState("");
+  const [order, setOrder] = useState(null);
+
   const navigate = useNavigate();
 
   const { id } = useParams();
@@ -21,9 +23,28 @@ const OrderDetails = () => {
 
   useEffect(() => {
     dispatch(getAllOrdersOfShop(seller._id));
-  }, [dispatch]);
+    getSpecificOrder();
+  }, [dispatch, seller._id]);
 
   const data = orders && orders.find((item) => item._id === id);
+
+  const orderNumber = data?.orderNo;
+
+  const getSpecificOrder = async () => {
+    try {
+      const response = await axios.get(`${server}/order/specific-order`, {
+        params: {
+          orderNo: orderNumber,
+        },
+      });
+
+      toast.success(response.data.message);
+      setOrder(response.data.order);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error occurred");
+      console.error("Error occurs", error);
+    }
+  };
 
   const orderUpdateHandler = async (e) => {
     await axios
@@ -96,7 +117,7 @@ const OrderDetails = () => {
 
       <div className="w-full flex items-center justify-between pt-6">
         <h5 className="text-[#00000084]">
-          Order ID: <span>#{data?._id?.slice(0, 8)}</span>
+          Order ID: <span>{data?.orderNo}</span>
         </h5>
         <h5 className="text-[#00000084]">
           Placed on: <span>{data?.createdAt?.slice(0, 10)}</span>
@@ -125,7 +146,7 @@ const OrderDetails = () => {
 
       <div className="border-t w-full text-right">
         <h5 className="pt-3 text-[18px]">
-          Total Price: <strong>Ksh{totalPricee}</strong>
+          Total Price: <strong>Ksh{data?.totalPrice}</strong>
         </h5>
       </div>
       <br />
@@ -150,15 +171,16 @@ const OrderDetails = () => {
         </div>
         <div className="w-full 800px:w-[40%]">
           <h4 className="pt-3 text-[20px]">Payment Info:</h4>
-          <h4>
-            Status:{" "}
-            {data?.paymentInfo?.status ? data?.paymentInfo?.status : "Not Paid"}
-          </h4>
+          <h4>Status: {order?.paymentInfo?.status ? "Paid" : "Not Paid"} </h4>
+        </div>
+        <div className="w-full 800px:w-[40%]">
+          <h4 className="pt-3 text-[20px]">Order Status:</h4>
+          <h4>Status: {order?.status} </h4>
         </div>
       </div>
       <br />
       <br />
-      <h4 className="pt-3 text-[20px] font-[600]">Order Status:</h4>
+      {/* <h4 className="pt-3 text-[20px] font-[600]">Order Status:</h4>
       {data?.status !== "Processing refund" &&
         data?.status !== "Refund Success" && (
           <select
@@ -208,7 +230,7 @@ const OrderDetails = () => {
         }
       >
         Update Status
-      </div>
+      </div> */}
     </div>
   );
 };

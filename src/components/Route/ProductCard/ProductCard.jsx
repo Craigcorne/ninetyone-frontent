@@ -103,21 +103,47 @@ const ProductCard = ({ data, isEvent, inRecent }) => {
     }
   };
 
-  const shareToSocialMedia = (value) => {
-    // Check if the navigator supports the share API
+  const shareToSocialMedia = (value, imageUrl) => {
     if (navigator.share) {
-      navigator
-        .share({
-          title: "Product Link",
-          text: "Check out this product!",
-          url: value,
-        })
-        .then(() => {
-          console.log("Product link shared successfully!");
-        })
-        .catch((error) => {
-          console.error("Error sharing product link:", error);
-        });
+      const shareData = {
+        title: "Check out this product!",
+        text: "Product Link: " + value,
+        url: value,
+      };
+
+      const files = [];
+
+      // Fetch and add the image file if imageUrl is provided
+      if (imageUrl) {
+        fetch(imageUrl)
+          .then((response) => response.arrayBuffer())
+          .then((imageBuffer) => {
+            const imageFile = new File([imageBuffer], "product_image.jpg", {
+              type: "image/jpeg",
+            });
+
+            files.push(imageFile);
+            shareData.files = files;
+
+            navigator
+              .share(shareData)
+              .then(() => {
+                console.log("Product link and image shared successfully!");
+              })
+              .catch((error) => {
+                console.error("Error sharing:", error);
+              });
+          })
+          .catch((error) => {
+            console.error("Error fetching image:", error);
+
+            // Share text only if there is an error fetching the image
+            navigator.share(shareData);
+          });
+      } else {
+        // Share text only if no imageUrl is provided
+        navigator.share(shareData);
+      }
     } else {
       // Fallback to copying the link to clipboard
       copyToClipboard(value);
@@ -349,16 +375,14 @@ const ProductCard = ({ data, isEvent, inRecent }) => {
                   ? "cursor-pointer absolute right-2 top-24"
                   : "cursor-pointer absolute right-2 top-36"
               }`}
-              // onClick={() => {
-              //   copyToClipboard(window.location.href);
-              // }}
               onClick={() =>
                 shareToSocialMedia(
                   `${
                     isEvent === true
                       ? `/product/${data._id}?isEvent=true`
                       : `/product/${data._id}`
-                  }`
+                  }`,
+                  data.images && data.images[0]?.url
                 )
               }
               color="#444"
