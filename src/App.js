@@ -91,6 +91,7 @@ import SearchOrder from "./components/SearchOrder.jsx";
 import Whatsapp from "./components/Whatsaap/Whatsapp.js";
 import ShopAllAuctions from "./pages/Shop/ShopAllAuctions.jsx";
 import { getAllCategory } from "./redux/actions/categories.js";
+import Privacy from "./pages/privacy.jsx";
 
 const App = () => {
   useEffect(() => {
@@ -110,6 +111,7 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/sign-up" element={<SignupPage />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy-policy" element={<Privacy />} />
         <Route
           path="/activation/:activation_token"
           element={<ActivationPage />}

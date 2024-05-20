@@ -69,6 +69,34 @@
   cursor: pointer;
 }
 
+/* policy */
+.privacycontainer {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h1 {
+  margin-bottom: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+h2 {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+p {
+  margin-bottom: 15px;
+}
+ol {
+  list-style-type: decimal;
+  margin-left: 20px;
+}
+li {
+  margin-bottom: 10px;
+}
+
 .icon {
   display: flex;
 }

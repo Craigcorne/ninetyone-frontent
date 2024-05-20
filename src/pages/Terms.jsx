@@ -30,7 +30,7 @@ const Terms = () => {
                 <li> Copyright and trademarks</li>
                 <li> Data privacy</li>
                 <li> Due diligence and audit rights</li>
-                <li>eShop's role as a marketplace</li>
+                <li>ninety one's role as a marketplace</li>
                 <li> Limitations and exclusions of liability</li>
                 <li>Indemnification</li>
                 <li> Breaches of these general terms and conditions</li>
@@ -49,14 +49,15 @@ const Terms = () => {
                   <p>Introduction</p>
                   <ol>
                     <li>
-                      ”eShop” is the trading name for the eShop group companies
-                      listed at Appendix 1. Each eShop group company (“eShop” or
-                      “we”) operates an e-commerce platform consisting of a
-                      website and mobile application (“marketplace”), together
-                      with supporting IT, logistics and payment infrastructure,
-                      for the sale and purchase of consumer products and
-                      services (“products”) in its allocated territory as
-                      defined at Appendix 1 (“territory”).{" "}
+                      ”ninety one” is the trading name for the ninety one group
+                      companies listed at Appendix 1. Each ninety one group
+                      company (“ninety one” or “we”) operates an e-commerce
+                      platform consisting of a website and mobile application
+                      (“marketplace”), together with supporting IT, logistics
+                      and payment infrastructure, for the sale and purchase of
+                      consumer products and services (“products”) in its
+                      allocated territory as defined at Appendix 1
+                      (“territory”).{" "}
                     </li>
                     <li>
                       {" "}
@@ -171,9 +172,9 @@ const Terms = () => {
                         <li>
                           {" "}
                           we shall accept binding sales, on behalf of sellers,
-                          but (unless eShop is indicated as the seller) eShop is
-                          not a party to the transaction between the seller and
-                          the buyer; and
+                          but (unless ninety one is indicated as the seller)
+                          ninety one is not a party to the transaction between
+                          the seller and the buyer; and
                         </li>
                         <li>
                           {" "}
@@ -288,9 +289,9 @@ const Terms = () => {
                     <li>
                       {" "}
                       Returned products shall be accepted and refunds issued by
-                      eShop, acting for and on behalf of the seller.
+                      ninety one, acting for and on behalf of the seller.
                       Notwithstanding paragraphs 4.1 and 4.2 above, in respect
-                      of digital products or services and fresh food, eShop
+                      of digital products or services and fresh food, ninety one
                       shall issue refunds in respect of failures in delivery
                       only. Refunds of payment for such products for any other
                       reasons shall be subject to the seller's terms and
@@ -321,13 +322,14 @@ const Terms = () => {
                     <li>
                       {" "}
                       Store credits may be earned and managed in accordance with
-                      the eShop Store Credit Terms and Conditions, as may be
-                      amended from time to time. eShop reserves the right to
-                      cancel or withdraw eShop store credit rewards for any
-                      reason in its discretion, including if we suspect fraud or
-                      foul play. You can view the eShop Store Credit terms and
-                      conditions and information about your eShop store credit
-                      account on our website and mobile application.
+                      the ninety one Store Credit Terms and Conditions, as may
+                      be amended from time to time. ninety one reserves the
+                      right to cancel or withdraw ninety one store credit
+                      rewards for any reason in its discretion, including if we
+                      suspect fraud or foul play. You can view the ninety one
+                      Store Credit terms and conditions and information about
+                      your ninety one store credit account on our website and
+                      mobile application.
                     </li>
                   </ol>
                 </li>
@@ -336,7 +338,7 @@ const Terms = () => {
                   <ol>
                     <li>
                       {" "}
-                      Promotions and competitions run by eShop and/or other
+                      Promotions and competitions run by ninety one and/or other
                       promoters shall be managed in accordance with the
                       Promotions Terms and Conditions, where applicable. You can
                       view Promotions Terms and Conditions where they apply on
@@ -533,8 +535,8 @@ const Terms = () => {
                     <li>
                       {" "}
                       In this section 10 words “marketplace” and "website” shall
-                      be used interchangeably to refer to eShop's websites and
-                      mobile applications.
+                      be used interchangeably to refer to ninety one's websites
+                      and mobile applications.
                     </li>
                     <li>
                       {" "}
@@ -737,10 +739,10 @@ const Terms = () => {
                     </li>
                     <li>
                       {" "}
-                      eShop's logos and our other registered and unregistered
-                      trademarks are trademarks belonging to us; we give no
-                      permission for the use of these trademarks, and such use
-                      may constitute an infringement of our rights.
+                      ninety one's logos and our other registered and
+                      unregistered trademarks are trademarks belonging to us; we
+                      give no permission for the use of these trademarks, and
+                      such use may constitute an infringement of our rights.
                     </li>
                     <li>
                       {" "}
@@ -759,20 +761,20 @@ const Terms = () => {
                     <li>
                       {" "}
                       Buyers agree to processing of their personal data in
-                      accordance with the terms of eShop's Privacy Notice and
-                      Cookie Notice.
+                      accordance with the terms of ninety one's Privacy Notice
+                      and Cookie Notice.
                     </li>
                     <li>
                       {" "}
-                      eShop shall process all personal data obtained through the
-                      marketplace and related services in accordance with the
-                      terms of our Privacy Notice and Cookie Notice and Privacy
-                      Policy.
+                      ninety one shall process all personal data obtained
+                      through the marketplace and related services in accordance
+                      with the terms of our Privacy Notice and Cookie Notice and
+                      Privacy Policy.
                     </li>
                     <li>
                       {" "}
                       Sellers shall be directly responsible to buyers for any
-                      misuse of their personal data and eShop shall bear no
+                      misuse of their personal data and ninety one shall bear no
                       liability to buyers in respect of any misuse by sellers of
                       their personal data.
                     </li>
@@ -812,7 +814,7 @@ const Terms = () => {
                   </ol>
                 </li>
                 <li>
-                  <p> eShop's role as a marketplace</p>
+                  <p> ninety one's role as a marketplace</p>
                   <ol>
                     <li>
                       {" "}
@@ -820,14 +822,14 @@ const Terms = () => {
                       <ol>
                         <li>
                           {" "}
-                          eShop facilitates a marketplace for buyers and third
-                          party sellers or eShop, where eShop is the seller of a
-                          product;
+                          ninety one facilitates a marketplace for buyers and
+                          third party sellers or ninety one, where ninety one is
+                          the seller of a product;
                         </li>
                         <li>
                           {" "}
-                          the relevant seller of the product (whether eShop is
-                          the seller or whether it is a third party seller)
+                          the relevant seller of the product (whether ninety one
+                          is the seller or whether it is a third party seller)
                           shall at all times remain exclusively liable for the
                           products they sell on the marketplace; and
                         </li>
@@ -836,17 +838,17 @@ const Terms = () => {
                           in the event that there is an issue arising from the
                           purchase of a product on the marketplace, the buyer
                           should seek recourse from the relevant seller of the
-                          product by following the process set out in eShop's
-                          Dispute Resolution Policy[a].
+                          product by following the process set out in ninety
+                          one's Dispute Resolution Policy[a].
                         </li>
                       </ol>
                     </li>
                     <li>
                       {" "}
-                      We commit to ensure that eShop, or third party sellers, as
-                      applicable, submit information relating to their products
-                      on the marketplace that is complete, accurate and up to
-                      date and pursuant thereto:
+                      We commit to ensure that ninety one, or third party
+                      sellers, as applicable, submit information relating to
+                      their products on the marketplace that is complete,
+                      accurate and up to date and pursuant thereto:
                       <ol>
                         <li>
                           {" "}
@@ -864,10 +866,10 @@ const Terms = () => {
                           {" "}
                           if a buyer has a complaint relating to the accuracy or
                           completeness of the product information received from
-                          a seller (including where eShop is the seller), the
-                          buyer can seek recourse from the relevant seller by
-                          following the process set out in the eShop Dispute
-                          Resolution Policy[b].
+                          a seller (including where ninety one is the seller),
+                          the buyer can seek recourse from the relevant seller
+                          by following the process set out in the ninety one
+                          Dispute Resolution Policy[b].
                         </li>
                       </ol>
                     </li>
@@ -876,9 +878,9 @@ const Terms = () => {
                       We do not warrant or represent that the marketplace will
                       operate without fault; or that the marketplace or any
                       service on the marketplace will remain available during
-                      the occurrence of events beyond eShop's control (force
-                      majeure events) which include but are not limited to;
-                      flood, drought, earthquake or other natural disasters;
+                      the occurrence of events beyond ninety one's control
+                      (force majeure events) which include but are not limited
+                      to; flood, drought, earthquake or other natural disasters;
                       hacking, viruses, malware or other malicious software
                       attacks on the marketplace; terrorist attacks, civil war,
                       civil commotion or riots; war, threat of or preparation
@@ -897,7 +899,7 @@ const Terms = () => {
                       alteration of any marketplace services, or if we stop
                       publishing the marketplace. This is without prejudice to
                       your rights in respect of any unfulfilled orders or other
-                      existing liabilities of eShop.
+                      existing liabilities of ninety one.
                     </li>
                     <li>
                       {" "}
@@ -906,7 +908,7 @@ const Terms = () => {
                       provide prior notice to the buyers and sellers of not less
                       than fifteen (15) days with clear guidance on the way
                       forward for the pending transactions or other existing
-                      liabilities of eShop.
+                      liabilities of ninety one.
                     </li>
                     <li>
                       {" "}
@@ -1064,7 +1066,7 @@ const Terms = () => {
                           by us and arising directly or indirectly out of your
                           use of our marketplace or any breach by you of any
                           provision of these general terms and conditions or the
-                          eShop codes, policies or guidelines; and
+                          ninety one codes, policies or guidelines; and
                         </li>
                         <li>
                           {" "}
@@ -1092,7 +1094,7 @@ const Terms = () => {
                       {" "}
                       If you breach these general terms and conditions, or if we
                       reasonably suspect that you have breached these general
-                      terms and conditions or any eShop codes, policies or
+                      terms and conditions or any ninety one codes, policies or
                       guidelines in any way we may:
                       <ol>
                         <li>
@@ -1142,11 +1144,11 @@ const Terms = () => {
                   <ol>
                     <li>
                       {" "}
-                      These general terms and conditions and the eShop codes,
-                      policies and guidelines (and in respect of sellers the
-                      seller terms and conditions) shall constitute the entire
-                      agreement between you and us in relation to your use of
-                      our marketplace and shall supersede all previous
+                      These general terms and conditions and the ninety one
+                      codes, policies and guidelines (and in respect of sellers
+                      the seller terms and conditions) shall constitute the
+                      entire agreement between you and us in relation to your
+                      use of our marketplace and shall supersede all previous
                       agreements between you and us in relation to your use of
                       our marketplace.
                     </li>
@@ -1158,10 +1160,11 @@ const Terms = () => {
                     <li>
                       {" "}
                       Should these general terms and conditions, the seller
-                      terms and conditions, and the eShop codes, policies and
-                      guidelines be in conflict, these terms and conditions, the
-                      seller terms and conditions and the eShop codes, policies
-                      and guidelines shall prevail in the order here stated.
+                      terms and conditions, and the ninety one codes, policies
+                      and guidelines be in conflict, these terms and conditions,
+                      the seller terms and conditions and the ninety one codes,
+                      policies and guidelines shall prevail in the order here
+                      stated.
                     </li>
                   </ol>
                 </li>
@@ -1171,8 +1174,8 @@ const Terms = () => {
                     <li>
                       {" "}
                       We may revise these general terms and conditions, the
-                      seller terms and conditions, and the eShop codes, policies
-                      and guidelines from time to time.
+                      seller terms and conditions, and the ninety one codes,
+                      policies and guidelines from time to time.
                     </li>
                     <li>
                       {" "}
@@ -1279,11 +1282,11 @@ const Terms = () => {
                       You may contact our sellers for after-sales queries,
                       including any disputes, by requesting their contact
                       details, including the full legal name of the Seller and
-                      where applicable the shop name, from eShop in accordance
-                      with the Dispute Resolution Policy[c], pursuant to which
-                      eShop shall be obliged to ensure that the seller is
-                      identifiable and clearly linked to the transaction in
-                      question.
+                      where applicable the shop name, from ninety one in
+                      accordance with the Dispute Resolution Policy[c], pursuant
+                      to which ninety one shall be obliged to ensure that the
+                      seller is identifiable and clearly linked to the
+                      transaction in question.
                     </li>
                     <li>
                       {" "}

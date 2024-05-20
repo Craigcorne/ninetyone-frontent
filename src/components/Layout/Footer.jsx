@@ -320,7 +320,22 @@ const Footer = () => {
           <span>
             &copy; {new Date().getFullYear()} NinetyOne. All rights reserved.
           </span>
-          <span>Terms · Privacy Policy</span>
+          <div className="flex items-center justify-center">
+            <Link
+              className="text-gray-400 hover:text-teal-400 duration-300 text-sm cursor-pointer leading-6 mr-4"
+              to="/terms"
+            >
+              Terms
+            </Link>
+            <span className="text-gray-400">·</span>
+            <Link
+              className="text-gray-400 hover:text-teal-400 duration-300 text-sm cursor-pointer leading-6 ml-4"
+              to="/privacy-policy"
+            >
+              Privacy Policy
+            </Link>
+          </div>
+
           <div className="sm:block flex items-center justify-center w-full">
             <img
               src="https://hamart-shop.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ffooter-payment.a37c49ac.png&w=640&q=75"
